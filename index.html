@@ -3,22 +3,453 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>База документов для педагогов</title>
+    <title>База документов Читинского педагогического колледжа</title>
     <style>
-        body { font-family: Arial, sans-serif; padding: 20px; max-width: 800px; margin: 0 auto; }
-        .doc-item { border: 1px solid #ddd; padding: 15px; margin: 10px 0; border-radius: 8px; }
-        h1 { color: #2c3e50; }
-        .btn { background: #3498db; color: white; padding: 10px 15px; border: none; border-radius: 5px; cursor: pointer; }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #e3f2fd 0%, #f5f9ff 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 25px rgba(0, 100, 200, 0.1);
+            overflow: hidden;
+        }
+        
+        .login-screen, .main-content {
+            padding: 30px;
+        }
+        
+        .header {
+            background: linear-gradient(90deg, #1e88e5, #42a5f5);
+            color: white;
+            padding: 25px;
+            text-align: center;
+            border-bottom: 5px solid #1565c0;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        
+        .logo-space {
+            width: 200px;
+            height: 150px;
+            margin: 20px auto;
+            background-color: #e3f2fd;
+            border: 3px dashed #42a5f5;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #1e88e5;
+            font-size: 14px;
+        }
+        
+        .logo-space img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+        
+        .login-form {
+            max-width: 400px;
+            margin: 30px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .login-form h2 {
+            color: #1e88e5;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: bold;
+        }
+        
+        .input-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #bbdefb;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border 0.3s;
+        }
+        
+        .input-group input:focus {
+            border-color: #1e88e5;
+            outline: none;
+        }
+        
+        .login-btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(90deg, #1e88e5, #42a5f5);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        .login-btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        .user-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background: #e3f2fd;
+            border-bottom: 1px solid #bbdefb;
+        }
+        
+        .user-info span {
+            font-weight: bold;
+            color: #1565c0;
+        }
+        
+        .logout-btn {
+            padding: 8px 15px;
+            background: #ff5252;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        .admin-controls {
+            background: #f1f8e9;
+            padding: 20px;
+            margin: 20px;
+            border-radius: 10px;
+            border-left: 5px solid #7cb342;
+        }
+        
+        .admin-controls h3 {
+            color: #558b2f;
+            margin-bottom: 15px;
+        }
+        
+        .add-doc-btn {
+            padding: 10px 20px;
+            background: #7cb342;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        .categories {
+            margin-top: 30px;
+        }
+        
+        .category {
+            background: white;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .category-header {
+            background: linear-gradient(90deg, #2196f3, #64b5f6);
+            color: white;
+            padding: 18px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+        
+        .documents {
+            padding: 15px;
+        }
+        
+        .document {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            margin: 10px 0;
+            background: #f8fafc;
+            border-radius: 8px;
+            border-left: 4px solid #42a5f5;
+        }
+        
+        .doc-info h4 {
+            color: #1e88e5;
+            margin-bottom: 5px;
+        }
+        
+        .doc-info p {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .doc-actions .download-btn {
+            padding: 10px 20px;
+            background: linear-gradient(90deg, #1e88e5, #42a5f5);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            font-weight: bold;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .info-note {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 20px;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+            }
+            
+            .header h1 {
+                font-size: 22px;
+            }
+            
+            .document {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .doc-actions {
+                margin-top: 10px;
+                width: 100%;
+            }
+            
+            .doc-actions .download-btn {
+                width: 100%;
+                text-align: center;
+            }
+        }
     </style>
 </head>
 <body>
-    <h1>Сбоник документов Читинского педагогического колледжа</h1>
-    <p>Здесь собраны основные документы для молодых педагогов</p>
-    
-    <div class="doc-item">
-        <h3>Требования ФГОС СПО</h3>
-        <p>Федеральные государственные стандарты</p>
-        <button class="btn" onclick="alert('Файл загружен!')">Скачать</button>
+    <div class="container">
+        <div class="header">
+            <h1>Читинский педагогический колледж</h1>
+            <p>Все документы для молодых педагогов</p>
+            <div class="logo-space">
+                <img src="https://япроф.рф/upload/iblock/217/urvbieh5vc68kqyckkyz9lig1sx1q4os.png" alt="Логотип ЧПК" height="140px">
+            </div>
+        </div>
+        
+        <div id="loginScreen" class="login-screen">
+            <div class="login-form">
+                <h2>Авторизация</h2>
+                <p style="text-align: center; margin-bottom: 20px; color: #666;">Введите логин и пароль для входа</p>
+                
+                <div class="input-group">
+                    <label for="username">Логин</label>
+                    <input type="text" id="username" placeholder="Введите логин">
+                </div>
+                
+                <div class="input-group">
+                    <label for="password">Пароль</label>
+                    <input type="password" id="password" placeholder="Введите пароль">
+                </div>
+                
+                <div style="margin-top: 25px;">
+                    <button class="login-btn" onclick="login()">Войти в систему</button>
+                </div>
+                
+                <div style="margin-top: 20px; font-size: 14px; color: #666;">
+                    <p>Доступные учетные записи:</p>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li>Наставник: логин <strong>admin</strong>, пароль <strong>admin</strong></li>
+                        <li>Педагог: логин <strong>prepod</strong>, пароль <strong>prepod</strong></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div id="mainContent" class="main-content hidden">
+            <div class="user-info">
+                <div>
+                    Вы вошли как: <span id="currentUser"></span>
+                    <span id="userRole" style="margin-left: 10px; font-size: 14px;"></span>
+                </div>
+                <button class="logout-btn" onclick="logout()">Выйти</button>
+            </div>
+            
+            <div id="adminPanel" class="admin-controls">
+                <h3>Панель наставника (администратора)</h3>
+                <p style="margin-bottom: 15px;">Здесь можно добавить новый документ для педагогов.</p>
+                <button class="add-doc-btn" onclick="addDocument()">Добавить документ</button>
+                <p style="margin-top: 10px; font-size: 14px; color: #666;">Пока что тут только это уведомление, но скоро я все сделаю</p>
+            </div>
+            
+            <div class="categories">
+                <h2 style="color: #1e88e5; margin-bottom: 20px; padding-left: 10px;">Категории документов</h2>
+                
+                <div class="category">
+                    <div class="category-header">Категория документов №1</div>
+                    <div class="documents">
+                        <div class="document">
+                            <div class="doc-info">
+                                <h4>Документ №1</h4>
+                                <p>Описание документа</p>
+                            </div>
+                            <div class="doc-actions">
+                                <a href="https://disk.yandex.ru/d/пример_ссылки_на_фгос" class="download-btn" target="_blank">Скачать</a>
+                            </div>
+                        </div>
+                        
+                        <div class="document">
+                            <div class="doc-info">
+                                <h4>Документ №2</h4>
+                                <p>Описание документа</p>
+                            </div>
+                            <div class="doc-actions">
+                                <a href="https://disk.yandex.ru/d/пример_ссылки_на_акты" class="download-btn" target="_blank">Скачать</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="category">
+                    <div class="category-header">Категория документов №2</div>
+                    <div class="documents">
+                        <div class="document">
+                            <div class="doc-info">
+                                <h4>Документ №1</h4>
+                                <p>Описание документа</p>
+                            </div>
+                            <div class="doc-actions">
+                                <a href="https://disk.yandex.ru/d/пример_ссылки_на_планы" class="download-btn" target="_blank">Скачать</a>
+                            </div>
+                        </div>
+                        
+                        <div class="document">
+                            <div class="doc-info">
+                                <h4>Документ №2</h4>
+                                <p>Описание документа</p>
+                            </div>
+                            <div class="doc-actions">
+                                <a href="https://disk.yandex.ru/d/пример_ссылки_на_рекомендации" class="download-btn" target="_blank">Скачать</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="info-note">
+                <strong>Читинский педагогический колледж</strong>
+            </div>
+        </div>
     </div>
+
+    <script>
+        function login() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            if ((username === 'admin' && password === 'admin') || 
+                (username === 'prepod' && password === 'prepod')) {
+                
+                localStorage.setItem('loggedIn', 'true');
+                localStorage.setItem('username', username);
+                localStorage.setItem('role', username === 'admin' ? 'Наставник' : 'Молодой педагог');
+                
+                document.getElementById('loginScreen').classList.add('hidden');
+                document.getElementById('mainContent').classList.remove('hidden');
+                
+                document.getElementById('currentUser').textContent = username;
+                document.getElementById('userRole').textContent = '(' + (username === 'admin' ? 'Наставник' : 'Молодой педагог') + ')';
+                
+                const adminPanel = document.getElementById('adminPanel');
+                if (username === 'admin') {
+                    adminPanel.classList.remove('hidden');
+                } else {
+                    adminPanel.classList.add('hidden');
+                }
+                
+            } else {
+                alert('Неверный логин или пароль! Используйте admin/admin или prepod/prepod');
+            }
+        }
+        
+        function logout() {
+            localStorage.removeItem('loggedIn');
+            localStorage.removeItem('username');
+            localStorage.removeItem('role');
+            
+            document.getElementById('loginScreen').classList.remove('hidden');
+            document.getElementById('mainContent').classList.add('hidden');
+            
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+        }
+        
+        function addDocument() {
+            alert('Пока что добавление не сделано');
+        }
+        
+        window.onload = function() {
+            const loggedIn = localStorage.getItem('loggedIn');
+            
+            if (loggedIn === 'true') {
+                const username = localStorage.getItem('username');
+                const role = localStorage.getItem('role');
+                
+                document.getElementById('loginScreen').classList.add('hidden');
+                document.getElementById('mainContent').classList.remove('hidden');
+                document.getElementById('currentUser').textContent = username;
+                document.getElementById('userRole').textContent = '(' + role + ')';
+                
+                // Управляем видимостью панели администратора
+                const adminPanel = document.getElementById('adminPanel');
+                if (username === 'admin') {
+                    adminPanel.classList.remove('hidden');
+                } else {
+                    adminPanel.classList.add('hidden');
+                }
+            }
+        }
+    </script>
 </body>
 </html>
